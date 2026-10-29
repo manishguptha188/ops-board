@@ -29,7 +29,7 @@ const formatTimestamp = (timestamp) => {
   });
 };
 
-const IncidentList = () => {
+const IncidentList = ({ refreshKey }) => {
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,7 +46,7 @@ const IncidentList = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [refreshKey]);
 
   if (loading) {
     return (

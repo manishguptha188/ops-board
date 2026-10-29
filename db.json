@@ -13,6 +13,21 @@
       "severity": "medium",
       "status": "open",
       "timestamp": "2026-10-29T10:30:00Z"
+    },
+    {
+      "title": "Payment API latency spike",
+      "severity": "high",
+      "status": "investigating",
+      "timestamp": "2026-10-29T11:46:00.471Z",
+      "id": "HuAMiv-sKSk"
+    },
+    {
+      "title": "hello there",
+      "severity": "low",
+      "status": "resolved",
+      "timestamp": "2026-10-29T11:49:52.901Z",
+      "id": "sw3Zdifsyog"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

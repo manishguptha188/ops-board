@@ -1,8 +1,14 @@
 import incidentsService from "./services/incidents";
-
+import IncidentForm from "./components/IncidentForm";
 import IncidentList from "./components/IncidentList";
+import { useState } from "react";
 
 const App = () => {
+  const [refreshKey, setRefreshKey] = useState(0);
+
+const handleIncidentCreated = () => {
+  setRefreshKey((current) => current + 1);
+};
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-5xl px-6 py-10">
@@ -19,8 +25,10 @@ const App = () => {
             Monitor incidents and track operational health.
           </p>
         </header>
+        <IncidentForm onIncidentCreated={handleIncidentCreated} />
 
-        <IncidentList />
+        <IncidentList refreshKey={refreshKey} />
+        
       </div>
     </main>
   );

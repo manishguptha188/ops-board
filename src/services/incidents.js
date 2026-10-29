@@ -9,6 +9,13 @@ function getAll() {
     .then((response) => response.data);
 }
 
+function create(newIncident) {
+  return axios
+    .post(API_BASE_URL, newIncident)
+    .then((response) => response.data);
+}
+
 export default {
   getAll,
+  create,
 };
