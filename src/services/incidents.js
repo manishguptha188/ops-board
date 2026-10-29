@@ -15,7 +15,14 @@ function create(newIncident) {
     .then((response) => response.data);
 }
 
+function updateStatus(id, status) {
+  return axios
+    .patch(`${API_BASE_URL}/${id}`, { status })
+    .then((response) => response.data);
+}
+
 export default {
   getAll,
   create,
+  updateStatus,
 };

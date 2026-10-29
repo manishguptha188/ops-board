@@ -4,14 +4,14 @@
       "id": "1",
       "title": "Database connection timeout in US-East",
       "severity": "critical",
-      "status": "investigating",
+      "status": "resolved",
       "timestamp": "2026-10-29T08:15:00Z"
     },
     {
       "id": "2",
       "title": "Memory spike on Authentication Worker",
       "severity": "medium",
-      "status": "open",
+      "status": "investigating",
       "timestamp": "2026-10-29T10:30:00Z"
     },
     {

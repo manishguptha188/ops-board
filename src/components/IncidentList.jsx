@@ -33,6 +33,8 @@ const IncidentList = ({ refreshKey }) => {
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updatingId, setUpdatingId] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
 
   useEffect(() => {
     incidentsService
@@ -48,6 +50,29 @@ const IncidentList = ({ refreshKey }) => {
       });
   }, [refreshKey]);
 
+
+  const handleStatusChange = (incident, newStatus) => {
+  setUpdatingId(incident.id);
+  setUpdateError(null);
+
+  incidentsService
+    .updateStatus(incident.id, newStatus)
+    .then((updatedIncident) => {
+      setIncidents((currentIncidents) =>
+        currentIncidents.map((item) =>
+          item.id === updatedIncident.id
+            ? updatedIncident
+            : item
+        )
+      );
+    })
+    .catch(() => {
+      setUpdateError("Could not update the incident status.");
+    })
+    .finally(() => {
+      setUpdatingId(null);
+    });
+};
   if (loading) {
     return (
       <div className="flex items-center gap-3 py-12 text-slate-400">
@@ -138,17 +163,36 @@ const IncidentList = ({ refreshKey }) => {
                   </span>
                 </div>
 
-                <div className="mt-5 flex items-center justify-between border-t border-slate-800 pt-4">
-                  <span className="text-sm text-slate-400">
-                    Current status
-                  </span>
+                <div className="mt-5 flex flex-col gap-3 border-t border-slate-800 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                <label
+                    htmlFor={`status-${incident.id}`}
+                    className="text-sm text-slate-400"
+                >
+                    Update status
+                </label>
 
-                  <span
-                    className={`rounded-md px-2.5 py-1 text-xs font-medium capitalize ${statusClass}`}
-                  >
-                    {status}
-                  </span>
+                <select
+                    id={`status-${incident.id}`}
+                    value={status}
+                    disabled={updatingId === incident.id}
+                    onChange={(event) =>
+                    handleStatusChange(incident, event.target.value)
+                    }
+                    className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-200 outline-none focus:border-cyan-500 disabled:opacity-50"
+                >
+                    <option value="open">Open</option>
+                    <option value="investigating">Investigating</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="closed">Closed</option>
+                </select>
+
+                {updatingId === incident.id && (
+                    <span className="text-xs text-cyan-400">
+                    Saving...
+                    </span>
+                )}
                 </div>
+
               </article>
             );
           })}
