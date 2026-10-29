@@ -21,8 +21,14 @@ function updateStatus(id, status) {
     .then((response) => response.data);
 }
 
+
+function remove(id) {
+  return axios.delete(`${API_BASE_URL}/${id}`);
+}
+
 export default {
   getAll,
   create,
   updateStatus,
+  remove,
 };

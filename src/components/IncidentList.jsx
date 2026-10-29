@@ -35,6 +35,8 @@ const IncidentList = ({ refreshKey }) => {
   const [error, setError] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
   const [updateError, setUpdateError] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
     incidentsService
@@ -71,6 +73,35 @@ const IncidentList = ({ refreshKey }) => {
     })
     .finally(() => {
       setUpdatingId(null);
+    });
+};
+
+const handleDelete = (incident) => {
+  const confirmed = window.confirm(
+    `Are you sure you want to delete "${incident.title}"?`
+  );
+
+  if (!confirmed) return;
+
+  setDeletingId(incident.id);
+  setDeleteError(null);
+
+  incidentsService
+    .remove(incident.id)
+    .then(() => {
+      setIncidents((currentIncidents) =>
+        currentIncidents.filter(
+          (item) => item.id !== incident.id
+        )
+      );
+    })
+    .catch(() => {
+      setDeleteError(
+        "Could not delete the incident. Please try again."
+      );
+    })
+    .finally(() => {
+      setDeletingId(null);
     });
 };
   if (loading) {
@@ -110,6 +141,15 @@ const IncidentList = ({ refreshKey }) => {
           {incidents.length} total
         </span>
       </div>
+
+      {deleteError && (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300"
+        >
+          {deleteError}
+        </div>
+      )}
 
       {incidents.length === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/50 px-6 py-12 text-center">
@@ -192,6 +232,21 @@ const IncidentList = ({ refreshKey }) => {
                     </span>
                 )}
                 </div>
+                                
+                <div className="mt-4 flex justify-end border-t border-slate-800 pt-4">
+                <button
+                    type="button"
+                    onClick={() => handleDelete(incident)}
+                    disabled={
+                    deletingId === incident.id ||
+                    updatingId === incident.id
+                    }
+                    className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                    {deletingId === incident.id ? "Deleting..." : "Delete incident"}
+                </button>
+                </div>
+
 
               </article>
             );
